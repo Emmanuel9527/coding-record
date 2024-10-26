@@ -1,0 +1,42 @@
+#problem 5.26 (r code)
+
+Plastic.data <- read.table(file = "C:/Users/User/Downloads/plastichardness.txt",header=FALSE,col.names=c("hardness","time"))
+attach(Plastic.data)
+model <- lm(hardness ~ time)
+
+#part a
+#求(XtX)^-1
+#r中默認向量為行矩陣
+
+X <- cbind(rep(1, 15), time) #X矩陣
+inv_XtX <- solve(t(X)%*%X) 
+
+#求b
+b=inv_XtX %*% t(X) %*% hardness
+
+#求Y hat
+Y_hat= X %*% b
+
+#求H
+H=X %*% inv_XtX %*% t(X)
+
+#求SSE
+anova(model) #查看residual sum of square
+
+#求b之variance估計
+SSE<-140.8
+MSE<-140.8/13
+b_variance=MSE*inv_XtX
+
+#求X305之predict variance
+X30 <- matrix(c(1,30))
+s_pred <- MSE*(1+t(X30)%*%inv_XtX%*%X30)
+
+#part c
+#求SSE之quadratic form
+A <- diag(15)-H
+
+
+
+
+
